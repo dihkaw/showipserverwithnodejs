@@ -1,0 +1,39 @@
+name: Create EC2 instance with Node.js 
+
+on:
+  workflow_dispatch:        # Menjalankan workflow manual
+    branches:
+      - main  
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest  # Menjalankan di runner GitHub Actions berbasis Ubuntu
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}  # Menambahkan session token
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Create EC2 Instance
+        id: ec2_create
+        run: |
+          # Membuat instance EC2 menggunakan AWS CLI
+          INSTANCE_ID=$(aws ec2 run-instances --image-id "ami-0c614dee691cbbf37" --instance-type "t2.micro" --key-name "vockey" --user-data "IyEvYmluL2Jhc2ggLXhlCnl1bSBpbnN0YWxsIC15IG5vZGVqcyBnaXQKZ2l0IGNsb25lIGh0dHBzOi8vZ2l0aHViLmNvbS9kaWhrYXcvc2hvd2lwc2VydmVyd2l0aG5vZGVqcy5naXQKY2Qgc2hvd2lwc2VydmVyd2l0aG5vZGVqcwpucG0gaW5zdGFsbApucG0gaW5zdGFsbCAtZyBwbTIKcG0yIHN0YXJ0IGluZGV4Lmpz" --network-interfaces '{"SubnetId":"subnet-09de9002777e220c2","AssociatePublicIpAddress":true,"DeviceIndex":0,"Groups":["sg-preview-1"]}' --credit-specification '{"CpuCredits":"standard"}' --tag-specifications '{"ResourceType":"instance","Tags":[{"Key":"Name","Value":"webnodejs"}]}' --metadata-options '{"HttpEndpoint":"enabled","HttpPutResponseHopLimit":2,"HttpTokens":"required"}' --private-dns-name-options '{"HostnameType":"ip-name","EnableResourceNameDnsARecord":false,"EnableResourceNameDnsAAAARecord":false}' --count "1")
+          echo "INSTANCE_ID=$INSTANCE_ID" >> $GITHUB_ENV
+        
+      - name: Wait for EC2 Instance to be Running
+        run: |
+          aws ec2 wait instance-running --instance-ids $INSTANCE_ID
+
+      - name: Get Public IP of EC2 Instance
+        id: ec2_ip
+        run: |
+          PUBLIC_IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
+          echo "PUBLIC_IP=$PUBLIC_IP" >> $GITHUB_ENV
