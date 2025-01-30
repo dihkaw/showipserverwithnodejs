@@ -10,5 +10,5 @@ jobs:
     runs-on: ubuntu-latest  # Menjalankan di runner GitHub Actions berbasis Ubuntu
 
     steps:
-      -  name: Whatever
-          run: echo "Hello world"
+      - name: Whatever
+        run: echo "Hello world"
