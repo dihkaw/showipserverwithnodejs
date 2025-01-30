@@ -8,7 +8,17 @@ jobs:
     runs-on: ubuntu-latest  # Menjalankan di runner GitHub Actions berbasis Ubuntu
 
     steps:
-      - name: Whatever
+      - name: Hello World 1
+        run: echo "Hello World"
+        
+      - name: Hello World 2
         env:
           teks: "Hello World"
         run: echo ${{env.teks}}
+
+      - name: Hello World 3
+        run: echo ${{secrets.HELLO_WORLD_3}}
+
+      - name: Hello World 4
+        environment: ENVIRONTMENTS_HELLO
+        run: echo ${{secrets.HELLO_WORLD_4}}
