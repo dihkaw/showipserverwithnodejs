@@ -18,11 +18,16 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}  # Menambahkan session token
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Create EC2 Instance
         id: ec2_create
+        env:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }} 
+          aws-region: ${{ secrets.AWS_REGION }}
         run: |
           # Membuat instance EC2 menggunakan AWS CLI
           INSTANCE_ID=$(aws ec2 run-instances --image-id "ami-0c614dee691cbbf37" --instance-type "t2.micro" --key-name "vockey" --user-data "IyEvYmluL2Jhc2ggLXhlCnl1bSBpbnN0YWxsIC15IG5vZGVqcyBnaXQKZ2l0IGNsb25lIGh0dHBzOi8vZ2l0aHViLmNvbS9kaWhrYXcvc2hvd2lwc2VydmVyd2l0aG5vZGVqcy5naXQKY2Qgc2hvd2lwc2VydmVyd2l0aG5vZGVqcwpucG0gaW5zdGFsbApucG0gaW5zdGFsbCAtZyBwbTIKcG0yIHN0YXJ0IGluZGV4Lmpz" --network-interfaces '{"SubnetId":"subnet-09de9002777e220c2","AssociatePublicIpAddress":true,"DeviceIndex":0,"Groups":["sg-0ed43e7ec526488de"]}' --credit-specification '{"CpuCredits":"standard"}' --tag-specifications '{"ResourceType":"instance","Tags":[{"Key":"Name","Value":"webnodejs"}]}' --metadata-options '{"HttpEndpoint":"enabled","HttpPutResponseHopLimit":2,"HttpTokens":"required"}' --private-dns-name-options '{"HostnameType":"ip-name","EnableResourceNameDnsARecord":false,"EnableResourceNameDnsAAAARecord":false}' --count "1")
