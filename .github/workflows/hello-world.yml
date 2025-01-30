@@ -1,9 +1,7 @@
 name: Hello World
 
 on:
-  workflow_dispatch:        # Menjalankan workflow manual
-    branches:
-      - main  
+  push:        # Menjalankan workflow otomatis
 
 jobs:
   deploy:
@@ -11,4 +9,6 @@ jobs:
 
     steps:
       - name: Whatever
-        run: echo "Hello world"
+        env:
+          teks: "Hello World"
+        run: echo ${{env.teks}}
