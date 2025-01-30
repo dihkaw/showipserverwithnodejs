@@ -1,0 +1,14 @@
+name: Hello World
+
+on:
+  workflow_dispatch:        # Menjalankan workflow manual
+    branches:
+      - main  
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest  # Menjalankan di runner GitHub Actions berbasis Ubuntu
+
+    steps:
+      -  name: Whatever
+          run: echo "Hello world"
