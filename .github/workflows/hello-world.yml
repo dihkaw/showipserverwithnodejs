@@ -14,15 +14,11 @@ jobs:
       - name: Hello World 2
         env:
           teks: "Hello World"
-        run: echo ${{env.teks}}
+        run: echo ${{env.teks}} # Menggunakan env di dalam jobs
 
-      - name: Hello World 3 # Menggunakan secrets dari Action
-        run: |
-          touch Hello-World.txt
-          echo ${{secrets.HELLO_WORLD_3}} >> Hello-World.txt 
-          cat Hello-World.txt
-
-      - name: Hello World 4 # Menggunakan environment: ENVIRONTMENTS_HELLO
-        run: |
-          echo ${{secrets.HELLO_WORLD_4}} >> Hello-World.txt 
-          cat Hello-World.txt
+      - name: Hello World 3 
+        run: echo ${{secrets.HELLO_WORLD_3}} # Menggunakan secrets dari Action
+        
+      - name: Hello World 4 
+        run: echo ${{secrets.HELLO_WORLD_4}} # Menggunakan environment: ENVIRONTMENTS_HELLO
+ 
