@@ -22,8 +22,3 @@ jobs:
       - name: Hello World 4 
         run: echo ${{secrets.HELLO_WORLD_4}} # Menggunakan environment: ENVIRONTMENTS_HELLO
 
-        run: | # Menggunakan env di dalam jobs
-          echo ${{env.teks1}} 
-          echo ${{env.teks2}} 
-          echo ${{env.teks3}} 
-          echo ${{env.teks4}} 
