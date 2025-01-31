@@ -24,9 +24,20 @@ jobs:
 
       - name: Hello World 5
         env:
-          teks: |
+          teks5: |
             "Hello World 5"
             "Hello World 5"
             "Hello World 5"
             "Hello World 5"
-        run: echo ${{env.teks}} # Menggunakan env di dalam jobs
+        run: echo ${{env.teks5}} # Menggunakan env di dalam jobs
+      - name: Hello World 6
+        env:
+          teks1: "Hello World 6"
+          teks2: "Hello World 6"
+          teks3: "Hello World 6"
+          teks4: "Hello World 6"
+        run: | # Menggunakan env di dalam jobs
+          echo ${{env.teks1}} 
+          echo ${{env.teks2}} 
+          echo ${{env.teks3}} 
+          echo ${{env.teks4}} 
