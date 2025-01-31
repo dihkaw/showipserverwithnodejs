@@ -22,7 +22,7 @@ jobs:
       - name: Hello World 4 
         run: echo ${{secrets.HELLO_WORLD_4}} # Menggunakan environment: ENVIRONTMENTS_HELLO
 
-       - name: Hello World 5
+      - name: Hello World 5
         env:
           teks: |
             "Hello World 5"
