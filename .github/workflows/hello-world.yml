@@ -9,11 +9,11 @@ jobs:
     environment: ENVIRONTMENTS_HELLO # Untuk Hello World 4
     steps:
       - name: Hello World 1
-        run: echo "Hello World"
+        run: echo "Hello World 1"
         
       - name: Hello World 2
         env:
-          teks: "Hello World"
+          teks: "Hello World 2"
         run: echo ${{env.teks}} # Menggunakan env di dalam jobs
 
       - name: Hello World 3 
@@ -21,4 +21,12 @@ jobs:
         
       - name: Hello World 4 
         run: echo ${{secrets.HELLO_WORLD_4}} # Menggunakan environment: ENVIRONTMENTS_HELLO
- 
+
+       - name: Hello World 5
+        env:
+          teks: |
+            "Hello World 5"
+            "Hello World 5"
+            "Hello World 5"
+            "Hello World 5"
+        run: echo ${{env.teks}} # Menggunakan env di dalam jobs
