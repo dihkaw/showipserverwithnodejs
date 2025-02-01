@@ -1,0 +1,69 @@
+name: Run Ansible Playbook to Deploy Node.js App
+
+on:
+  push:
+    branches:
+      - main  # Trigger workflow saat ada push ke branch main
+
+jobs:
+  run-ansible:
+    name: Run Ansible Playbook
+    runs-on: ubuntu-latest  # Gunakan runner Ubuntu terbaru
+
+    steps:
+      # Step 1: Checkout kode dari repositori
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Install Ansible
+      - name: Install Ansible
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ansible
+
+      # Step 3: Clone repositori Node.js app
+      - name: Clone Node.js App Repository
+        run: |
+          git clone https://github.com/dihkaw/showipserverwithnodejs.git nodejs-app
+
+      # Step 4: Jalankan playbook Ansible
+      - name: Run Ansible Playbook
+        run: |
+          echo "---
+          - name: Deploy Node.js App
+            hosts: localhost
+            become: yes  # Jalankan dengan hak akses root
+            tasks:
+              - name: Update apt cache
+                apt:
+                  update_cache: yes
+
+              - name: Install Node.js and npm
+                apt:
+                  name:
+                    - nodejs
+                    - npm
+                  state: present
+
+              - name: Install PM2 globally
+                npm:
+                  name: pm2
+                  global: yes
+
+              - name: Navigate to Node.js app directory
+                shell: cd nodejs-app && npm install
+
+              - name: Run Node.js app using PM2
+                shell: |
+                  cd nodejs-app
+                  pm2 start index.js --name 'nodejs-app'
+
+              - name: Ensure PM2 runs on startup
+                shell: pm2 startup && pm2 save
+
+              - name: Print success message
+                debug:
+                  msg: 'Node.js app is running on port 5000!'
+          " > playbook.yml
+
+          ansible-playbook playbook.yml
