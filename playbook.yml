@@ -29,12 +29,12 @@
 
     - name: Install Node.js dependencies
       npm:
-        path: "{{ ansible_user_dir }}/showipserverwithnodejs"
+        path: "/showipserverwithnodejs"
         state: present
 
     - name: Start Node.js app using PM2
       shell: |
-        cd {{ ansible_user_dir }}/showipserverwithnodejs
+        cd /showipserverwithnodejs
         pm2 start index.js --name 'nodejs-app'
       args:
         executable: /bin/bash
