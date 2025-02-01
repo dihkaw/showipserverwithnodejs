@@ -1,0 +1,51 @@
+---
+- name: Deploy Node.js App
+  hosts: localhost  # Target localhost (mesin yang sama)
+  become: yes       # Jalankan dengan hak akses root
+  vars:
+    app_port: 5000  # Port yang digunakan aplikasi
+
+  tasks:
+    - name: Install Node.js and npm (Ubuntu)
+      apt:
+        name:
+          - nodejs
+          - npm
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install Node.js and npm (Amazon Linux 2023)
+      yum:
+        name:
+          - nodejs
+          - npm
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Install PM2 globally
+      npm:
+        name: pm2
+        global: yes
+
+    - name: Install Node.js dependencies
+      npm:
+        path: "{{ ansible_user_dir }}/showipserverwithnodejs"
+        state: present
+
+    - name: Start Node.js app using PM2
+      shell: |
+        cd {{ ansible_user_dir }}/showipserverwithnodejs
+        pm2 start index.js --name 'nodejs-app'
+      args:
+        executable: /bin/bash
+
+    - name: Ensure PM2 runs on startup
+      shell: |
+        pm2 startup
+        pm2 save
+      args:
+        executable: /bin/bash
+
+    - name: Print success message
+      debug:
+        msg: "Node.js app is running on port {{ app_port }}!"
