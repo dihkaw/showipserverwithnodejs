@@ -21,7 +21,7 @@ const server = http.createServer((req, res) => {
 
   const port = server.address().port;
   
-  // HTML dengan CSS styling
+  // HTML dengan efek hujan
   const html = `
   <!DOCTYPE html>
   <html lang="en">
@@ -42,7 +42,26 @@ const server = http.createServer((req, res) => {
         display: flex;
         justify-content: center;
         align-items: center;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: #1a202c;
+        overflow: hidden;
+        position: relative;
+      }
+      
+      /* Efek hujan */
+      .raindrop {
+        position: fixed;
+        top: -20px;
+        width: 1px;
+        height: 20px;
+        background: linear-gradient(transparent, #fff);
+        animation: fall 1s linear infinite;
+        z-index: 1;
+      }
+      
+      @keyframes fall {
+        to {
+          transform: translateY(100vh);
+        }
       }
       
       .container {
@@ -53,6 +72,8 @@ const server = http.createServer((req, res) => {
         text-align: center;
         max-width: 600px;
         width: 90%;
+        position: relative;
+        z-index: 2;
       }
       
       h1 {
@@ -89,6 +110,12 @@ const server = http.createServer((req, res) => {
     </style>
   </head>
   <body>
+    <!-- Efek hujan -->
+    ${Array.from({length: 60}, (_,i) => 
+      `<div class="raindrop" style="left: ${Math.random() * 100}%; 
+      animation-delay: ${Math.random() * 5}s;"></div>`
+    ).join('')}
+    
     <div class="container">
       <h1>🖥️ Server Information</h1>
       
