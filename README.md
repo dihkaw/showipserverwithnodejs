@@ -21,7 +21,7 @@ node index.js
 
 ## Alternatif
 ```bash
-npm install pm2 -g && npm stat index.js --name "Displaying IP Server with Node.js"
+npm install pm2 -g && npm start index.js --name "Displaying IP Server with Node.js"
 ```
 
 ## Cek di browser 
